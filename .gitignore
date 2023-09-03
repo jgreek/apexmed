@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+# dependencies
+/fe2/node_modules
 /.pnp
 .pnp.js
 
