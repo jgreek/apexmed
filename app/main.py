@@ -7,10 +7,12 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.medical_records import MedicalRecords
+from app.medical_records_generator import MedicalRecordGenerator
 
 # Define FastAPI app
 app = FastAPI()
-
+CURRENT_DIR = Path(__file__).parent
+DATA_DIR = CURRENT_DIR.parent / "data"
 # Add CORS settings
 origins = [
     "http://localhost:3000",  # Allow frontend origin during development
@@ -25,7 +27,7 @@ app.add_middleware(
 )
 
 # Import MedicalRecords class and instantiate
-records = MedicalRecords(Path("/Users/johngreek/Dev/ApexMed/data"))
+records = MedicalRecords(Path(DATA_DIR))
 
 # Define Pydantic models
 class Record(BaseModel):
@@ -77,6 +79,12 @@ def update_record(record_update: RecordUpdate):
     else:
         raise HTTPException(status_code=404, detail="Record not found")
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/populate_records/")
+def populate_records():
+    generator = MedicalRecordGenerator(DATA_DIR)
+    generator.generate_records(10, 12, wipe=False)
+    return {"status": "success", "message": "Record updated successfully."}
+
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)

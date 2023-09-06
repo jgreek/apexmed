@@ -55,7 +55,7 @@ export default function Page() {
                                 <td className="py-2 px-4">{record.MedicineInformation.map(med => med.MedicineName).join(", ")}</td>
                                 <td className="py-2 px-4">{record.MedicineUsageDuringVisit.Usage}</td>
                                 <td className="py-2 px-4">
-                                    <Link href={`/surgeries/edit?id=${record.VisitInformation.VisitID}`} legacyBehavior>
+                                    <Link href={`/surgeries/${record.VisitInformation.VisitID}`} legacyBehavior>
                                         <a className="text-blue-500 hover:text-blue-700 underline">Edit</a>
                                     </Link>
                                 </td>

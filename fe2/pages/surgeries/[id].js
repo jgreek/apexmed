@@ -5,8 +5,7 @@ import {useEffect, useState} from "react";
 export default function EditPage() {
     const [record, setRecord] = useState(null);
     const router = useRouter();
-    const {id} = router.query; // Getting the ID from the query parameter
-
+    const {id} = router.query;
 
     useEffect(() => {
         async function fetchRecord() {
@@ -20,9 +19,15 @@ export default function EditPage() {
         fetchRecord();
     }, [id]);
 
+    const handleInputChange = (path, value) => {
+        let obj = record;
+        const keys = path.split('.');
+        keys.slice(0, -1).forEach(key => obj = obj[key]);
+        obj[keys.pop()] = value;
+        setRecord({...record});
+    }
+
     const handleSave = async () => {
-        // Handle sending the edited data back to the FastAPI endpoint
-        // This is a basic example and should be expanded with error handling and validation
         const response = await fetch(`http://localhost:8000/update_record`, {
             method: 'POST',
             headers: {
@@ -30,9 +35,8 @@ export default function EditPage() {
             },
             body: JSON.stringify(record)
         });
-
         if (response.ok) {
-            // Redirect back to the list or show a success message
+            // Redirect or success message
         }
     };
 
@@ -42,19 +46,32 @@ export default function EditPage() {
         <SurgeriesLayout>
             <div className="container mx-auto px-4 py-6 text-gray-800">
                 <h2 className="text-2xl mb-4">Edit Medical Record</h2>
-                <div>{JSON.stringify(record)}</div>
-                {/* Here you'll render form fields for each property of the record. Example: */}
-                <label className="block mb-2">Date of Procedure</label>
-                <input
-                    value={record.VisitInformation?.VisitDate}
-                    onChange={(e) => setRecord(prev => ({...prev, VisitInformation: {VisitDate: e.target.value}}))}
-                    className="border mb-4 p-2"
-                />
-                {/* Repeat similar blocks for other fields */}
-                <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Save
-                </button>
+                <form onSubmit={e => { e.preventDefault(); handleSave(); }}>
+                    {/* For demonstration, rendering just a couple of properties. You can extend this for other properties of the record. */}
+                    <div className="mb-4">
+                        <label className="block mb-2">Date of Procedure</label>
+                        <input
+                            value={record.VisitInformation?.VisitDate || ''}
+                            onChange={e => handleInputChange('VisitInformation.VisitDate', e.target.value)}
+                            className="border p-2 w-full"
+                        />
+                    </div>
+
+                    {/* Assume there's another property "PatientName" at the root of the record object. */}
+                    <div className="mb-4">
+                        <label className="block mb-2">Patient Name</label>
+                        <input
+                            value={record.PatientInformation.Name || ''}
+                            onChange={e => handleInputChange('PatientInformation.Name', e.target.value)}
+                            className="border p-2 w-full"
+                        />
+                    </div>
+
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                        Save
+                    </button>
+                </form>
             </div>
         </SurgeriesLayout>
     );
 }
-

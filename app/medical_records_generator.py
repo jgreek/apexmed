@@ -5,7 +5,8 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import random
 from faker import Faker
-
+CURRENT_DIR = Path(__file__).parent
+DATA_DIR = CURRENT_DIR.parent / "data"
 
 class MedicalRecordGenerator:
     def __init__(self, assets_directory):
@@ -108,5 +109,5 @@ class MedicalRecordGenerator:
 
 # Usage
 if __name__ == "__main__":
-    generator = MedicalRecordGenerator("/Users/johngreek/Dev/ApexMed/data")
+    generator = MedicalRecordGenerator(DATA_DIR)
     generator.generate_records(10, 12, wipe=True)
