@@ -6,8 +6,8 @@ from typing import List, Optional
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.medical_records import MedicalRecords
-from app.medical_records_generator import MedicalRecordGenerator
+from .medical_records import MedicalRecords
+from .medical_records_generator import MedicalRecordGenerator
 
 # Define FastAPI app
 app = FastAPI()
