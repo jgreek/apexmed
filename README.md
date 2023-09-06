@@ -1,5 +1,5 @@
-# Medicine Optimization During Surgeries
-An application built to optimize the use of medicines during surgeries, ensuring efficient utilization and reduction of waste. Utilizing the power of data science and modern web frameworks, this project aims to bridge the gap between surgical operations and inventory management.
+# ApexMed
+ApexMed (Medicine Optimization During Surgeries) is a solution designed to address inefficiencies in medicine inventory during surgical operations. By harnessing data science, this application derives valuable insights from surgical and inventory records to minimize waste, mitigate costs, and ensure consistent medication availability during surgeries.
 
 ## Table of Contents
 - [Background](#background)
@@ -13,17 +13,32 @@ An application built to optimize the use of medicines during surgeries, ensuring
 Surgeries require precise administration of medications. However, inefficiencies in tracking, utilizing, and replenishing medicine inventories can lead to waste, increased costs, and potential shortages during critical operations. This project leverages data science to draw actionable insights from surgical and medicine inventory records, ensuring optimal medicine use during surgeries.
 
 ## Installation
+
+### Front end
 ```bash
-# Clone this repository
-git clone [your-repo-link]
+# Navigate to the frontend directory
+cd frontend
 
-# Navigate to the project directory
-cd project-name
+# Install the required npm packages
+npm install
 
-# Install dependencies
+# To run the development server
+npm run dev
+
+```
+### Fast API
+
+```# Navigate to the backend directory
+cd backend-directory-name
+
+# Create a virtual environment (optional but recommended)
+python -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+
+# Install required Python packages
 pip install -r requirements.txt
-(Include any additional setup steps, database configurations, environment variables, etc.)
-
 ```
 
 ## Usage
@@ -53,7 +68,7 @@ uvicorn app.main:app --reload
 (Include any tools, software, or methods you're using for data collection)
 
 ## Contribute
-Details on how others can contribute to the project. For example:
+Here's how you can contribute to the project:
 - Fork the repository.
 - Create a new branch (`git checkout -b feature-branch`).
 - Make changes.
