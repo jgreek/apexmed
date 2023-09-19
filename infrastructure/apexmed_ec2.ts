@@ -2,6 +2,7 @@
 import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 // Define the main stack class.
 export class ApexMedEc2Stack extends cdk.Stack {
@@ -32,16 +33,37 @@ export class ApexMedEc2Stack extends cdk.Stack {
         });
 
         // Only add specific allow rules. For example, if SSH access is needed from a specific IP:
-        securityGroup.addIngressRule(ec2.Peer.ipv4('[ADD SERVER SPECIFIC IP]/32'), ec2.Port.tcp(22), 'allow ssh access from specific ipv4');
+        // securityGroup.addIngressRule(ec2.Peer.ipv4('[ADD SERVER SPECIFIC IP]/32'), ec2.Port.tcp(22), 'allow ssh access from specific ipv4');
+        securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'allow ssh access from any ipv4');
 
         // Define a new EC2 instance using the above-defined VPC and security group.
         // It utilizes a t2.micro instance type and the latest version of Amazon Linux 2 AMI.
-        new ec2.Instance(this, 'MyInstance', {
+        const myInstance = new ec2.Instance(this, 'MyInstance', {
             vpc,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO), // Set instance type to t2.micro.
             machineImage: ec2.MachineImage.latestAmazonLinux2(), // Use the latest Amazon Linux 2 AMI.
             securityGroup, // Attach the previously defined security group.
             associatePublicIpAddress: true,  // Ensure the instance requests a public IP
+            keyName: 'Greek_SX3', // The name of the key pair, not the filename
         });
+
+        // Step 2: Define the DynamoDB table for Assets
+        const table = new dynamodb.Table(this, 'Assets', {
+            partitionKey: {
+                name: 'id',
+                type: dynamodb.AttributeType.STRING
+            },
+            sortKey: {
+                name: 'asset_name',
+                type: dynamodb.AttributeType.STRING
+            },
+            removalPolicy: cdk.RemovalPolicy.DESTROY, // Only for dev/test environments
+        });
+
+        // Step 3: Ensure the EC2 instance can communicate with DynamoDB
+        // Note: Normally you wouldn't open direct access from EC2 to DynamoDB but rather use VPC endpoints.
+        // For simplicity, we are granting full DynamoDB permissions to the EC2 instance.
+        table.grantFullAccess(myInstance.role);
     }
 }
+
