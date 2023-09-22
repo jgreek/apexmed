@@ -47,8 +47,8 @@ export class ApexMedEc2Stack extends cdk.Stack {
             keyName: 'Greek_SX3', // The name of the key pair, not the filename
         });
 
-        // Step 2: Define the DynamoDB table for Assets
-        const table = new dynamodb.Table(this, 'Assets', {
+        // Step 2: Define the DynamoDB asset_table for Assets
+        const asset_table = new dynamodb.Table(this, 'Assets', {
             partitionKey: {
                 name: 'id',
                 type: dynamodb.AttributeType.STRING
@@ -60,10 +60,23 @@ export class ApexMedEc2Stack extends cdk.Stack {
             removalPolicy: cdk.RemovalPolicy.DESTROY, // Only for dev/test environments
         });
 
+
+         const results_table = new dynamodb.Table(this, 'Results', {
+            partitionKey: {
+                name: 'id',
+                type: dynamodb.AttributeType.STRING
+            },
+            sortKey: {
+                name: 'result_name',
+                type: dynamodb.AttributeType.STRING
+            },
+            removalPolicy: cdk.RemovalPolicy.DESTROY, // Only for dev/test environments
+        });
         // Step 3: Ensure the EC2 instance can communicate with DynamoDB
         // Note: Normally you wouldn't open direct access from EC2 to DynamoDB but rather use VPC endpoints.
         // For simplicity, we are granting full DynamoDB permissions to the EC2 instance.
-        table.grantFullAccess(myInstance.role);
+        asset_table.grantFullAccess(myInstance.role);
+        results_table.grantFullAccess(myInstance.role);
     }
 }
 

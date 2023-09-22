@@ -11,11 +11,14 @@ export default function SurgeriesLayout({ children }) {
             <h1 className="text-4xl font-bold text-white mb-4 border-b-2 border-blue-400 pb-2">ApexMed</h1>
         </div>
         <ul>
-          <NavItem href="/dashboard/surgeries" currentPath={pathname}>
+          <NavItem href="/surgeries" currentPath={pathname}>
             Surgeries
           </NavItem>
-          <NavItem href="/dashboard/medications" currentPath={pathname}>
+          <NavItem href="/medications" currentPath={pathname}>
             Medical Inventory
+          </NavItem>
+            <NavItem href="/upload" currentPath={pathname}>
+            Data Upload
           </NavItem>
           {/* Add other links as needed */}
         </ul>
