@@ -3,9 +3,11 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { InfrastructureStack } from '../lib/infrastructure-stack';
 import {ApexMedEc2Stack} from "../apexmed_ec2";
+import {CognitoStack} from "../cognito-stack";
 
 const app = new cdk.App();
 new ApexMedEc2Stack(app, "ApexMedEc2Stack");
+new CognitoStack(app, "CognitoStack");
 new InfrastructureStack(app, 'InfrastructureStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
